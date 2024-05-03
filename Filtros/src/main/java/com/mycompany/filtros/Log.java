@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Filter.java to edit this template
  */
-package Filtros;
+package com.mycompany.filtros;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Enumeration;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -37,16 +38,11 @@ public class Log implements Filter {
             log("Log:DoBeforeProcessing");
         }
 
-        // Write code here to process the request and/or response before
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log items on the request object,
-        // such as the parameters.
-        /*
 	for (Enumeration en = request.getParameterNames(); en.hasMoreElements(); ) {
 	    String name = (String)en.nextElement();
 	    String values[] = request.getParameterValues(name);
 	    int n = values.length;
-	    StringBuffer buf = new StringBuffer();
+	    StringBuilder buf = new StringBuilder();
 	    buf.append(name);
 	    buf.append("=");
 	    for(int i=0; i < n; i++) {
@@ -56,7 +52,6 @@ public class Log implements Filter {
 	    }
 	    log(buf.toString());
 	}
-         */
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
@@ -106,12 +101,8 @@ public class Log implements Filter {
         Throwable problem = null;
         try {
             chain.doFilter(request, response);
-        } catch (Throwable t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
+        } catch (IOException | ServletException t) {
             problem = t;
-            t.printStackTrace();
         }
         
         doAfterProcessing(request, response);
